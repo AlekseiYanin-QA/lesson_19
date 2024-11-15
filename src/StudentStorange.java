@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StudentStorange {
-    private Map<Long, Student> studentStorangeMap = new HashMap<>();
+    private final Map<Long, Student> studentStorangeMap = new HashMap<>();
     private StudentSurnameStorage studentSurnameStorage = new StudentSurnameStorage();
     private Long carentId = 0L;
 
@@ -15,7 +15,10 @@ public class StudentStorange {
      * @param student данные о студенте
      * @return сгенерированный индификатор студента
      */
-    public Long createStudent(Student student) {
+    public Long createStudent(Student student) throws InputValidationException {
+        if (!isValidStudent(student)) {
+            throw new InputValidationException("Ошибка: неверные данные о студенте.");
+        }
         Long nextId = getNextId();
         studentStorangeMap.put(nextId, student);
         studentSurnameStorage.studentCreated(nextId, student.getSurname());
@@ -28,18 +31,19 @@ public class StudentStorange {
      * @param student данные о студенте
      * @return true, если данные были обновлены, false если студент не был найден
      */
-    public boolean updateStudent(long id, Student student) {
+    public boolean updateStudent(long id, Student student) throws InputValidationException {
         if (!studentStorangeMap.containsKey(id)) {
             return false;
         } else {
-            String newSurame = student.getSurname();
-            String oldSurame = studentStorangeMap.get(id).getSurname();
-            studentSurnameStorage.studentUpdated(id, oldSurame, newSurame);
+            if (!isValidStudent(student)) {
+                throw new InputValidationException("Ошибка: неверные данные о студенте для обновления.");
+            }
+            String newSurname = student.getSurname();
+            String oldSurname = studentStorangeMap.get(id).getSurname();
+            studentSurnameStorage.studentUpdated(id, oldSurname, newSurname);
             studentStorangeMap.put(id, student);
             return true;
         }
-
-
     }
 
     /**
@@ -47,7 +51,7 @@ public class StudentStorange {
      * @param id индификатор студента
      * @return true, если данные были удалены, false если студент не был найден
      */
-    public boolean deleteStudent(long id) {
+    public boolean deleteStudent(long id) throws InputValidationException {
         Student remove = studentStorangeMap.remove(id);
         if (remove != null) {
             String surname = remove.getSurname();
@@ -90,14 +94,25 @@ public class StudentStorange {
       return res;
     }
 
+    public Map<String, Long> getCountByCity() {
+        Map<String, Long> res = studentStorangeMap.values().stream()
+                .collect(Collectors.toMap(
+                        student ->  student.getCity(),
+                        student -> 1L,
+                        (count1, count2) -> count1 + count2
+                ));
+        return res;
+    }
+
+
+    private boolean isValidStudent(Student student) {
+        return student != null &&
+                student.getSurname() != null && !student.getSurname().trim().isEmpty() &&
+                student.getName() != null && !student.getName().trim().isEmpty() &&
+                student.getCourse() != null && !student.getCourse().trim().isEmpty() &&
+                student.getCity() != null && !student.getCity().trim().isEmpty() &&
+                student.getAge() > 0; // Допустим, возраст должен быть больше 0
+    }
+
 }
 
-//public Map<String, Long> getCountByCourse() {
-//    Map<String, Long> res = new HashMap<>();
-//    for (Student student : studentStorangeMap.values()) {
-//        String key = student.getCourse();
-//        Long count = res.getOrDefault(key, 0L);
-//        count++;
-//        res.put(key, count);
-//    }
-//    return res;

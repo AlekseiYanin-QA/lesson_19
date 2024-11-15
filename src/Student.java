@@ -8,10 +8,6 @@ public class Student {
     private String city;
     private int age;
 
-
-
-
-
     public int getAge() {
         return age;
     }

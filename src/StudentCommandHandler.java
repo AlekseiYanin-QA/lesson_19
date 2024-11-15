@@ -69,7 +69,7 @@ public class StudentCommandHandler {
         }
 
         try {
-            Long id = Long.valueOf(dataArray[0]); // id = первое значение
+            Long id = Long.valueOf(dataArray[0]);
             Student student = new Student();
 
             student.setSurname(dataArray[1]);

@@ -9,6 +9,7 @@ public enum Action {
     UPDATE(2, true),
     DELETE(3, true),
     STATS_BY_COURSE(4, false),
+    STATS_BY_CITY (5, false),
     SEARCH(6, true),
     ERROR(-1, false);
 

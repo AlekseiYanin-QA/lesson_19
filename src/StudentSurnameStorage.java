@@ -13,17 +13,23 @@ public class StudentSurnameStorage {
         existingIds.add(id);
         surnameTreeMap.put(surname, existingIds);
     }
-    public void studentDeleted(long id, String surname) {
-        surnameTreeMap.get(surname).remove(id);
+    public void studentDeleted(long id, String surname) throws InputValidationException {
+        Set<Long> studentIds = surnameTreeMap.get(surname);
+        if (studentIds == null || !studentIds.contains(id)) {
+            throw new InputValidationException("Ошибка: студент с ID " + id + " и фамилией " + surname + " не найден.");
+        }
+        studentIds.remove(id);
+        if (studentIds.isEmpty()) {
+            surnameTreeMap.remove(surname);
+        }
     }
-    public void studentUpdated(long id, String oldSurname, String newSurname) {
+    public void studentUpdated(long id, String oldSurname, String newSurname) throws InputValidationException {
         studentDeleted(id, oldSurname);
         studentCreated(id, newSurname);
     }
 
     /**
      * Данный метод возвращает униканый индентификатор студента, чьи фамилия бменьше или равны переданной
-     * @return
      */
 
     public Set<Long> getStudentBySurnameLessOrEqualThan(String surname) {

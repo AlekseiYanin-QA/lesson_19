@@ -1,12 +1,10 @@
 package src;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class StudentSurnameStorage {
-    private TreeMap<String, Set<Long>> surnameTreeMap = new TreeMap<>();
+    private final TreeMap<String, Set<Long>> surnameTreeMap = new TreeMap<>();
 
     public void studentCreated(long id, String surname) {
         Set<Long> existingIds = surnameTreeMap.getOrDefault(surname, new HashSet<>());
@@ -28,17 +26,38 @@ public class StudentSurnameStorage {
         studentCreated(id, newSurname);
     }
 
-    /**
-     * Данный метод возвращает униканый индентификатор студента, чьи фамилия бменьше или равны переданной
-     */
 
-    public Set<Long> getStudentBySurnameLessOrEqualThan(String surname) {
-        Set <Long> res = surnameTreeMap.headMap(surname, true)
-                .values()
-                .stream()
-                .flatMap(longs -> longs.stream())
-                .collect(Collectors.toSet());
-        return res;
+    /**
+     * Возвращает уникальных студентов, чьи фамилии точно совпадают с переданным параметром
+     */
+    public Set<Long> getStudentsByExactSurname(String surname) {
+        return Optional.ofNullable(surnameTreeMap.get(surname)).orElse(Collections.emptySet());
     }
 
+    /**
+     * Возвращает студентов, чьи фамилии находятся в диапазоне от первой до второй включительно
+     */
+    public Set<Long> getStudentsBetweenSurnames(String firstSurname, String secondSurname) {
+        SortedMap<String, Set<Long>> subMap = surnameTreeMap
+                .subMap(firstSurname, true, secondSurname, true);
+        return subMap.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
+    }
 }
+
+
+/**
+ * Данный метод возвращает униканый индентификатор студента, чьи фамилия бменьше или равны переданной
+
+Метод переписан в отдельные методы
+
+ public Set<Long> getStudentBySurnameLessOrEqualThan(String surname) {
+ Set <Long> res = surnameTreeMap.headMap(surname, true)
+ .values()
+ .stream()
+ .flatMap(longs -> longs.stream())
+ .collect(Collectors.toSet());
+ return res;
+ }
+ */

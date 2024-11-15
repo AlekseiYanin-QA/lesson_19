@@ -47,7 +47,7 @@ public class Main {
         System.out.println("2. Обновление данных");
         System.out.println("3. Удаление данных");
         System.out.println("4. Вывод статистки по курсам");
-        System.out.println("5. Вывод статистки по годам");
+        System.out.println("5. Вывод статистки по городам");
         System.out.println("6. Поиск по фамилии");
         System.out.println("--------------------------");
     }

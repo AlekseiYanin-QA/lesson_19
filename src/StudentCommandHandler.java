@@ -9,7 +9,7 @@ public class StudentCommandHandler {
 
     public void processCommand(Command command) {
         Action action = command.getAction();
-        switch (action){
+        switch (action) {
             case CREATE -> processCreateCommand(command);
             case UPDATE -> processUpdateCommand(command);
             case DELETE -> processDeleteCommand(command);
@@ -105,6 +105,7 @@ public class StudentCommandHandler {
             throw new RuntimeException(e);
         }
     }
+
     public void processStatsByCityCommand(Command command) {
         Map<String, Long> data = studentStorange.getCountByCity();
         printStatistics(data);
@@ -115,4 +116,4 @@ public class StudentCommandHandler {
                 System.out.println(city + " - " + count)
         );
     }
-   }
+}

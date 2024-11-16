@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class StudentStorange {
     private final Map<Long, Student> studentStorangeMap = new HashMap<>();
-    private StudentSurnameStorage studentSurnameStorage = new StudentSurnameStorage();
+    private final StudentSurnameStorage studentSurnameStorage = new StudentSurnameStorage();
     private Long carentId = 0L;
 
     /**
@@ -110,7 +110,7 @@ public class StudentStorange {
     }
 
     public void printMap(Map<String, Long> data) {
-        data.entrySet().stream().forEach(e -> {
+        data.entrySet().forEach(e -> {
             System.out.println(e.getKey() + " - " + e.getValue());
         });
     }

@@ -63,21 +63,25 @@ public class StudentCommandHandler {
         String data = command.getData();
         String[] dataArray = data.split(",");
 
-        if (dataArray.length != 5) {
-            System.out.println("Ошибка: ожидается 5 данных для обновления студента.");
+        // Проверяем, соответствует ли количество элементов ожиданиям
+        // (в данном случае предполагаем 6 элементов: ID, фамилия, имя, курс, город, возраст).
+        if (dataArray.length != 6) {
+            System.out.println("Ошибка: ожидается 6 данных для обновления студента.");
             return;
         }
 
         try {
-            Long id = Long.valueOf(dataArray[0]);
+            Long id = Long.valueOf(dataArray[0]); // Получаем ID
             Student student = new Student();
 
+            // Устанавливаем данные студента из массива
             student.setSurname(dataArray[1]);
             student.setName(dataArray[2]);
             student.setCourse(dataArray[3]);
             student.setCity(dataArray[4]);
             student.setAge(Integer.valueOf(dataArray[5]));
 
+            // Обновляем студента в хранилище
             studentStorange.updateStudent(id, student);
             studentStorange.printAll();
         } catch (NumberFormatException e) {
@@ -85,7 +89,7 @@ public class StudentCommandHandler {
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Ошибка: недостаточно данных для обновления студента.");
         } catch (InputValidationException e) {
-            throw new RuntimeException(e);
+            System.out.println("Ошибка валидации данных студента: " + e.getMessage());
         }
     }
 

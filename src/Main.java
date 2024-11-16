@@ -4,8 +4,9 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static StudentCommandHandler STUDENT_COMMAND_HANDLER
-            = new StudentCommandHandler();
+    public static StudentCommandHandler studentCommandHandler = new StudentCommandHandler();
+
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         while (true) {
@@ -16,13 +17,12 @@ public class Main {
             } else if (command.getAction() == Action.ERROR) {
                 continue;
             } else {
-                STUDENT_COMMAND_HANDLER.processCommand(command);
+                studentCommandHandler.processCommand(command);
             }
         }
     }
 
     private static Command readCommand() {
-        Scanner scanner = new Scanner(System.in);
         try {
             String code = scanner.nextLine();
             Integer actionCode = Integer.valueOf(code);
@@ -33,11 +33,12 @@ public class Main {
             } else {
                 return new Command(action);
             }
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: некорректный формат ввода. " + e.getMessage());
         } catch (Exception ex) {
-            System.out.println("Проблемма обработки ввода" + ex.getMessage());
-            return new Command(Action.ERROR);
+            System.out.println("Проблема обработки ввода: " + ex.getMessage());
         }
-
+        return new Command(Action.ERROR);
     }
 
     private static void printMessage() {

@@ -2,7 +2,7 @@ package src;
 
 public class Command {
 
-    private Action action;
+    private final Action action;
     private String data;
 
 

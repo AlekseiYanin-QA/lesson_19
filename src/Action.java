@@ -13,8 +13,8 @@ public enum Action {
     SEARCH(6, true),
     ERROR(-1, false);
 
-    private Integer code;
-    private boolean requireAdditionalData;
+    private final Integer code;
+    private final boolean requireAdditionalData;
 
     Action(Integer code, boolean requireAdditionalData) {
         this.code = code;
